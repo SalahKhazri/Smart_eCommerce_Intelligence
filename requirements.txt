@@ -1,5 +1,41 @@
+# ======================
+# SCRAPING
+# ======================
 requests
 beautifulsoup4
 lxml
-pandas
 playwright
+
+# ======================
+# DATA PROCESSING
+# ======================
+pandas
+numpy
+
+# ======================
+# MACHINE LEARNING
+# ======================
+scikit-learn
+xgboost
+lightgbm
+
+# ======================
+# ASSOCIATION RULES
+# ======================
+mlxtend
+
+# ======================
+# VISUALIZATION
+# ======================
+matplotlib
+seaborn
+
+# ======================
+# OPTIONAL (utils)
+# ======================
+tqdm
+
+# ======================
+# Kubeflow SDK
+# ======================
+kfp
