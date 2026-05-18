@@ -25,104 +25,120 @@ Données → Pipeline ML → Dashboard BI → LLM → MCP → CI/CD
 ## Structure du projet
 
 ```
-dashboard/
-	app.py
-	assets/
-		style.css
-	components/
-		charts.py
-		kpi_cards.py
-		navbar.py
-	pages/
-		1_KPI.py
-		2_Analytics.py
-		3_TopK.py
-		4_Recommendations.py
-data/
-	processed/
-	raw/
-		products.csv
-images/
-LLM/
-	__init__.py
-	llm_engine.py
-	prompts.py
-	recommender.py
-MCP/
-	__init__.py
-	client.py
-	logger.py
-	logs.json
-	permissions.json
-	server.py
-	tools.py
-ML/
-	association_rules.py
-	clean_data.py
-	clustering.py
-	config.py
-	dimensionality.py
-	feature_engineering.py
-	load_data.py
-	normalization.py
-	pipeline.py
-	prediction.py
-	scoring.py
-	shop_analysis.py
-	topk_selection.py
-	visualization.py
-ml_pipeline_kubeflow/
-	compile_pipeline.py
-	ecommerce_pipeline.py
-	ecommerce_pipeline.yaml
-	run_pipeline.py
-	components/
-		clean.py
-		features.py
-		load.py
-		score.py
-		topk.py
-		train.py
-	docker/
-		processing/
-			Dockerfile
-			requirements.txt
-		scoring/
-			Dockerfile
-			requirements.txt
-		topk/
-			Dockerfile
-			requirements.txt
-		training/
-			Dockerfile
-			requirements.txt
-models/
-outputs/
-	association_rules.csv
-	clusters.csv
-	final_products_ml.csv
-	shop_ranking.csv
-	topk_products.csv
-reports/
-	topk_products.csv
-Scrapping/
-	main.py
-	agents/
-		__init__.py
-		base_agent.py
-		orchestrator.py
-		shopify_agent.py
-		woocommerce_agent.py
-	data/
-		products.csv
-		products.json
-	utils/
-		__init__.py
-		helpers.py
-Dockerfile
-main.py
-README.md
-requirements.txt
+Smart_eCommerce_Intelligence/
+│
+├── .github/
+│   ├── workflows/
+│   │   └── ml_pipeline.yml
+├── dashboard/                      # Interface BI (Streamlit)
+│   ├── app.py
+│   ├── assets/
+│   │   └── style.css
+│   ├── components/
+│   │   ├── charts.py
+│   │   ├── kpi_cards.py
+│   │   └── navbar.py
+│   └── pages/
+│       ├── 1_KPI.py
+│       ├── 2_Analytics.py
+│       ├── 3_TopK.py
+│       └── 4_Recommendations.py
+│
+├── data/
+│   ├── raw/
+│   │   └── products.csv
+│   └── processed/
+│
+├── images/
+├── LLM/                            # Module IA (LLM + prompts)
+│   ├── __init__.py
+│   ├── llm_engine.py
+│   ├── prompts.py
+│   └── recommender.py
+│
+├── MCP/                            # Architecture MCP (agent system)
+│   ├── __init__.py
+│   ├── client.py
+│   ├── server.py
+│   ├── logger.py
+│   ├── logs.json
+│   ├── permissions.json
+│   └── tools.py
+│
+├── ML/                             # Machine Learning pipeline
+│   ├── load_data.py
+│   ├── clean_data.py
+│   ├── feature_engineering.py
+│   ├── normalization.py
+│   ├── clustering.py
+│   ├── dimensionality.py
+│   ├── scoring.py
+│   ├── topk_selection.py
+│   ├── prediction.py
+│   ├── association_rules.py
+│   ├── shop_analysis.py
+│   ├── visualization.py
+│   ├── config.py
+│   └── pipeline.py
+│
+├── ml_pipeline_kubeflow/          # Pipeline Kubeflow (MLOps)
+│   ├── compile_pipeline.py
+│   ├── ecommerce_pipeline.py
+│   ├── ecommerce_pipeline.yaml
+│   ├── run_pipeline.py
+│   │
+│   ├── components/
+│   │   ├── load.py
+│   │   ├── clean.py
+│   │   ├── features.py
+│   │   ├── score.py
+│   │   ├── topk.py
+│   │   └── train.py
+│   │
+│   └── docker/                        # Images Docker par étape
+│       ├── data/
+│       │   ├── Dockerfile.data
+│       │   └── requirements.txt
+│       │
+│       ├── ml/
+│       │   ├── Dockerfile.ml
+│       │   └── requirements.txt
+│       │
+│       └── serving/
+│           ├── Dockerfile.serving
+│           └── requirements.txt
+│
+├── Scrapping/                      # Data collection
+│   ├── main.py
+│   ├── agents/
+│   │   ├── base_agent.py
+│   │   ├── orchestrator.py
+│   │   ├── shopify_agent.py
+│   │   └── woocommerce_agent.py
+│   ├── data/
+│   │   ├── products.csv
+│   │   └── products.json
+│   └── utils/
+│       ├── helpers.py
+│       └── __init__.py
+│
+├── models/                         # Modèles ML sauvegardés
+│
+├── outputs/                        # Résultats ML
+│   ├── association_rules.csv
+│   ├── clusters.csv
+│   ├── final_products_ml.csv
+│   ├── shop_ranking.csv
+│   └── topk_products.csv
+│
+├── reports/                        # Rapports finaux
+│   └── topk_products.csv
+│
+├── .gitignore
+├── Dockerfile                      # Container principal
+├── main.py                         # Entrée principale (optionnel)
+├── README.md
+└── requirements.txt
 ```
 
 ---
@@ -132,8 +148,8 @@ requirements.txt
 ### 1. Cloner le projet
 
 ```bash id="clone_fr"
-git clone https://github.com/your-username/smart-ecommerce-intelligence.git
-cd smart-ecommerce-intelligence
+git clone https://github.com/SalahKhazri/Smart_eCommerce_Intelligence.git
+cd Smart_eCommerce_Intelligence
 ```
 ### 2. Créer un environnement virtuel
 ```
