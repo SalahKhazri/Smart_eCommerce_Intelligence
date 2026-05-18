@@ -1,0 +1,13 @@
+.main {
+    background-color: #0E1117;
+}
+
+h1, h2, h3 {
+    color: white;
+}
+
+.stMetric {
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #1E1E1E;
+}
