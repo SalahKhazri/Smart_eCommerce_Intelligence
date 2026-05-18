@@ -168,6 +168,12 @@ pip install -r requirements.txt
 
 👉 https://ollama.com/download
 
+- Installer llama3
+
+```
+ollama pull llama3
+```
+
 - Télécharger un modèle :
 
 ```
