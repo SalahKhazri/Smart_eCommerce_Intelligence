@@ -1,11 +1,18 @@
 import json
+import os
 from MCP.tools import get_top_products, explain_product
 from MCP.logger import log_action
 
 class MCPClient:
 
-    def __init__(self, permissions_path="MCP/permissions.json"):
-        self.permissions = json.load(open(permissions_path))
+    def __init__(self):
+        # dossier MCP
+        MCP_DIR = os.path.dirname(__file__)
+
+        permissions_path = os.path.join(MCP_DIR, "permissions.json")
+
+        with open(permissions_path, "r") as f:
+            self.permissions = json.load(f)
 
     def run_topk(self, df):
 
