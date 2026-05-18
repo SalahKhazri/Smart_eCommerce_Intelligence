@@ -18,6 +18,14 @@ Ce projet a pour objectif de construire un système complet d’intelligence e-c
 
 ---
 
+## Objectifs du projet
+- Construire un système complet de Data Science + IA
+- Combiner ML + LLM + MLOps
+- Simuler une architecture industrielle moderne
+- Développer des compétences en IA appliquée
+
+---
+
 ## 🏗️ Architecture globale
 ```
 Données → Pipeline ML → Dashboard BI → LLM → MCP → CI/CD
@@ -262,12 +270,6 @@ docker run -p 8501:8501 smart-ecommerce
 - LangChain 
 - Ollama (LLM local) 
 - MCP (architecture agentique simplifiée)
-
-## Objectifs du projet
-- Construire un système complet de Data Science + IA
-- Combiner ML + LLM + MLOps
-- Simuler une architecture industrielle moderne
-- Développer des compétences en IA appliquée
 
 
 ## Auteur
