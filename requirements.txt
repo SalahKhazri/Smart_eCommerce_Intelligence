@@ -39,3 +39,15 @@ tqdm
 # Kubeflow SDK
 # ======================
 kfp
+
+# ======================
+# Kubeflow SDK
+# ======================
+streamlit
+
+# ======================
+# langchain et ollama
+# ======================
+langchain
+langchain-ollama
+ollama
