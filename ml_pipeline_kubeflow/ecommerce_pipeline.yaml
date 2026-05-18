@@ -1,0 +1,289 @@
+# PIPELINE DEFINITION
+# Name: smart-ecommerce-pipeline
+components:
+  comp-load-data:
+    executorLabel: exec-load-data
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: STRING
+  comp-preprocess-data:
+    executorLabel: exec-preprocess-data
+    inputDefinitions:
+      parameters:
+        data_json:
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: STRING
+  comp-save-results:
+    executorLabel: exec-save-results
+    inputDefinitions:
+      parameters:
+        data_json:
+          parameterType: STRING
+  comp-score-products:
+    executorLabel: exec-score-products
+    inputDefinitions:
+      parameters:
+        data_json:
+          parameterType: STRING
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: STRING
+  comp-select-top-k:
+    executorLabel: exec-select-top-k
+    inputDefinitions:
+      parameters:
+        data_json:
+          parameterType: STRING
+        k:
+          defaultValue: 5.0
+          isOptional: true
+          parameterType: NUMBER_INTEGER
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: STRING
+deploymentSpec:
+  executors:
+    exec-load-data:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - load_data
+        command:
+        - sh
+        - -c
+        - "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip ||\
+          \ python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1\
+          \ python3 -m pip install --quiet --no-warn-script-location 'pandas'  &&\
+          \  python3 -m pip install --quiet --no-warn-script-location 'kfp==2.16.1'\
+          \ '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"\
+          $0\" \"$@\"\n"
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef load_data() -> str:\n    import pandas as pd\n\n    df = pd.read_csv(\"\
+          data/raw/products.csv\")\n\n    print(\"\u2714 Dataset loaded :\", df.shape)\n\
+          \n    return df.to_json()\n\n"
+        image: python:3.11
+    exec-preprocess-data:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - preprocess_data
+        command:
+        - sh
+        - -c
+        - "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip ||\
+          \ python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1\
+          \ python3 -m pip install --quiet --no-warn-script-location 'pandas'  &&\
+          \  python3 -m pip install --quiet --no-warn-script-location 'kfp==2.16.1'\
+          \ '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"\
+          $0\" \"$@\"\n"
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef preprocess_data(data_json: str) -> str:\n    import pandas as\
+          \ pd\n\n    df = pd.read_json(data_json)\n\n    # Supprimer les valeurs\
+          \ nulles\n    df = df.dropna()\n\n    # Nettoyage simple\n    df[\"price\"\
+          ] = df[\"price\"].astype(float)\n\n    print(\"\u2714 Preprocessing done\"\
+          )\n\n    return df.to_json()\n\n"
+        image: python:3.11
+    exec-save-results:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - save_results
+        command:
+        - sh
+        - -c
+        - "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip ||\
+          \ python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1\
+          \ python3 -m pip install --quiet --no-warn-script-location 'pandas'  &&\
+          \  python3 -m pip install --quiet --no-warn-script-location 'kfp==2.16.1'\
+          \ '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"\
+          $0\" \"$@\"\n"
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef save_results(data_json: str):\n    import pandas as pd\n    import\
+          \ os\n\n    df = pd.read_json(data_json)\n\n    os.makedirs(\"reports\"\
+          , exist_ok=True)\n\n    df.to_csv(\"reports/top_products.csv\", index=False)\n\
+          \n    print(\"\u2714 Results saved\")\n\n"
+        image: python:3.11
+    exec-score-products:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - score_products
+        command:
+        - sh
+        - -c
+        - "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip ||\
+          \ python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1\
+          \ python3 -m pip install --quiet --no-warn-script-location 'pandas'  &&\
+          \  python3 -m pip install --quiet --no-warn-script-location 'kfp==2.16.1'\
+          \ '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"\
+          $0\" \"$@\"\n"
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef score_products(data_json: str) -> str:\n    import pandas as\
+          \ pd\n\n    df = pd.read_json(data_json)\n\n    # Exemple de score\n   \
+          \ df[\"score\"] = (\n        df[\"rating\"] * 0.5 +\n        df[\"sales\"\
+          ] * 0.3 -\n        df[\"price\"] * 0.2\n    )\n\n    print(\"\u2714 Scoring\
+          \ completed\")\n\n    return df.to_json()\n\n"
+        image: python:3.11
+    exec-select-top-k:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - select_top_k
+        command:
+        - sh
+        - -c
+        - "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip ||\
+          \ python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1\
+          \ python3 -m pip install --quiet --no-warn-script-location 'pandas'  &&\
+          \  python3 -m pip install --quiet --no-warn-script-location 'kfp==2.16.1'\
+          \ '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"\
+          $0\" \"$@\"\n"
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef select_top_k(data_json: str, k: int = 5) -> str:\n    import\
+          \ pandas as pd\n\n    df = pd.read_json(data_json)\n\n    top_k = df.sort_values(by=\"\
+          score\", ascending=False).head(k)\n\n    print(\"\u2714 Top-K selected\"\
+          )\n\n    return top_k.to_json()\n\n"
+        image: python:3.11
+pipelineInfo:
+  name: smart-ecommerce-pipeline
+root:
+  dag:
+    tasks:
+      load-data:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-load-data
+        taskInfo:
+          name: load-data
+      preprocess-data:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-preprocess-data
+        dependentTasks:
+        - load-data
+        inputs:
+          parameters:
+            data_json:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: load-data
+        taskInfo:
+          name: preprocess-data
+      save-results:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-save-results
+        dependentTasks:
+        - select-top-k
+        inputs:
+          parameters:
+            data_json:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: select-top-k
+        taskInfo:
+          name: save-results
+      score-products:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-score-products
+        dependentTasks:
+        - preprocess-data
+        inputs:
+          parameters:
+            data_json:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: preprocess-data
+        taskInfo:
+          name: score-products
+      select-top-k:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-select-top-k
+        dependentTasks:
+        - score-products
+        inputs:
+          parameters:
+            data_json:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: score-products
+            k:
+              runtimeValue:
+                constant: 10.0
+        taskInfo:
+          name: select-top-k
+schemaVersion: 2.1.0
+sdkVersion: kfp-2.16.1
