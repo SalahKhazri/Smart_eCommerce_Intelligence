@@ -1,14 +1,30 @@
-# Smart_eCommerce_Intelligence
+# 🧠 Smart eCommerce Intelligence
 
-Projet d'analyse et de recommandation pour e‑commerce — pipeline ML, visualisation et composants LLM.
+Projet intelligent de **data mining et MLOps** pour l’analyse, la sélection et la recommandation de produits e-commerce à l’aide du Machine Learning, des LLMs et d’une architecture MCP.
 
+---
+
+## 🚀 Vue d’ensemble du projet
+
+Ce projet a pour objectif de construire un système complet d’intelligence e-commerce capable de :
+
+- 📊 Analyser des données produits
+- 🏆 Sélectionner les Top-K produits selon un score
+- 🤖 Générer des recommandations intelligentes avec un LLM
+- 📈 Visualiser les résultats dans un dashboard interactif
+- ⚙️ Automatiser les pipelines ML avec Kubeflow
+- 🔐 Implémenter une architecture MCP (Model Context Protocol simplifié)
+- 🚀 Ajouter une automatisation CI/CD avec GitHub Actions
+
+---
+
+## 🏗️ Architecture globale
+```
+Données → Pipeline ML → Dashboard BI → LLM → MCP → CI/CD
+```
 ## Structure du projet
 
 ```
-Dockerfile
-main.py
-README.md
-requirements.txt
 dashboard/
 	app.py
 	assets/
@@ -103,30 +119,138 @@ Scrapping/
 	utils/
 		__init__.py
 		helpers.py
-
-## Fichiers clés
-
-- `main.py` : point d'entrée principal du projet.
-- `dashboard/app.py` : application Streamlit pour visualisation et KPI.
-- `ML/` : modules pour préparation, modèles et scoring.
-- `LLM/` : intégration et prompts pour composants de recommandation basés sur LLM.
-- `ml_pipeline_kubeflow/` : pipeline Kubeflow et composants Docker.
-
-## Démarrage rapide
-
-1. Créer un environnement Python et installer les dépendances :
-
-```bash
-pip install -r requirements.txt
-```
-
-2. Lancer le dashboard (exemple) :
-
-```bash
-streamlit run dashboard/app.py
+Dockerfile
+main.py
+README.md
+requirements.txt
 ```
 
 ---
 
-Si vous voulez, je peux compléter ce README avec des descriptions détaillées pour chaque dossier et des exemples d'utilisation.
+## ⚙️ Installation
+
+### 1. Cloner le projet
+
+```bash id="clone_fr"
+git clone https://github.com/your-username/smart-ecommerce-intelligence.git
+cd smart-ecommerce-intelligence
+```
+### 2. Créer un environnement virtuel
+```
+python -m venv venv
+venv\Scripts\activate   # Windows
+# source venv/bin/activate (Linux/Mac)
+```
+### 3. Installer les dépendances
+```
+pip install -r requirements.txt
+```
+
+## Installation du LLM (Ollama)
+
+- Installer Ollama :
+
+👉 https://ollama.com/download
+
+- Télécharger un modèle :
+
+```
+ollama run llama3
+```
+
+- Modèle léger recommandé :
+
+```
+ollama run phi3
+```
+## 🚀 Lancer le projet
+Lancer le dashboard Streamlit
+```
+cd dashboard
+streamlit run app.py
+```
+
+## Fonctionnalités
+### 1. Traitement des données
+- Nettoyage du dataset produit
+- Feature engineering (score de qualité produit)
+
+### 2. Sélection Top-K
+
+-Classement des produits selon un score
+-Analyse business des produits les plus performants
+
+### 3. Dashboard BI (Streamlit)
+- KPI (indicateurs clés)
+- Graphiques interactifs
+- Analyse visuelle des tendances
+### 4. Recommandation par LLM
+- Analyse des produits
+- Génération de recommandations intelligentes
+- Explications business automatisées
+### 5. Architecture MCP (simplifiée)
+
+Le système MCP permet :
+
+- Host : Streamlit (interface principale)
+- Client : gestion des requêtes
+- Server : orchestration des analyses
+- Logger : suivi des actions
+- Permissions : contrôle d’accès
+
+### Fonctionnalités MCP
+- Journalisation des actions utilisateur
+- Sécurisation des accès aux outils
+- Traçabilité des requêtes
+- Simulation d’agent intelligent
+
+### 6. CI/CD (GitHub Actions)
+
+Automatisation du workflow :
+
+- Vérification du code Python
+- Installation des dépendances
+- Test du pipeline ML
+- Compilation automatique
+
+## Exemple de logs MCP
+ ```
+ {"time": "2026-05-18", "action": "TOPK_REQUEST", "data": "demande de produits populaires"}
+ {"time": "2026-05-18", "action": "LLM_REQUEST", "data": "analyse produit Gymshark"}
+ ```
+
+## Docker (optionnel)
+
+Construire l’image :
+```
+docker build -t smart-ecommerce .
+```
+Exécuter :
+```
+docker run -p 8501:8501 smart-ecommerce
+```
+
+## Technologies utilisées
+- Python 
+- Pandas / NumPy
+- Streamlit 
+- Kubeflow Pipelines 
+- Docker 
+- GitHub Actions 
+- LangChain 
+- Ollama (LLM local) 
+- MCP (architecture agentique simplifiée)
+
+## Objectifs du projet
+- Construire un système complet de Data Science + IA
+- Combiner ML + LLM + MLOps
+- Simuler une architecture industrielle moderne
+- Développer des compétences en IA appliquée
+
+
+## Auteur
+
+Projet académique : Smart eCommerce Intelligence
+Module : Data Mining & MLOps
+
 
